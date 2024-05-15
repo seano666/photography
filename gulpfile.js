@@ -6,6 +6,7 @@ var sass = require('gulp-sass')(require('sass'));
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var del = require('del');
+var watermark = require("gulp-watermark");
 
 gulp.task('delete', function () {
     return del(['images/*.*']);
@@ -45,6 +46,17 @@ gulp.task('minify-js', function () {
         .pipe(rename({basename: 'main.min'}))
         .pipe(gulp.dest('./assets/js'));
 });
+
+gulp.task('watermark', async function(){
+    gulp.src("images/fulls/*.JPG")
+	.pipe(watermark({
+		image: "watermark.png",
+        resize: '100x100',
+        gravity: 'Center'
+	}))
+	.pipe(gulp.dest("images/thumbs"));
+})
+
 
 // build task
 gulp.task('build', gulp.series('sass', 'minify-js'));
